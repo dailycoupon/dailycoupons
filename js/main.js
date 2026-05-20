@@ -5,7 +5,7 @@ function logoImg(store, size = 60, small = false) {
   const placeholder = small ? 'store-logo-sm-placeholder' : 'store-logo-placeholder';
   if (!store) return `<div class="${placeholder}">?</div>`;
   return `<img src="${store.logo}" alt="${store.name}" class="${cls}"
-    onerror="this.outerHTML='<div class=\\"${placeholder}\\">${store.name.charAt(0)}</div>'"
+    onerror="this.outerHTML='<div class=&quot;${placeholder}&quot;>${store.name.charAt(0)}</div>'"
     loading="lazy">`;
 }
 
