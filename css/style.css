@@ -75,6 +75,7 @@ img { max-width: 100%; display: block; }
 .nav-logo-img {
   height: 36px;
   width: auto;
+  margin-top: -6px;
 }
 
 .nav-links {
