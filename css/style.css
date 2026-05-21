@@ -875,6 +875,45 @@ footer {
 .empty-state svg { margin: 0 auto 16px; opacity: 0.4; }
 .empty-state h3 { font-size: 18px; color: var(--gray-700); margin-bottom: 8px; }
 
+/* ===== AD SLOTS ===== */
+.ad-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  background: var(--gray-100);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ad-label {
+  font-size: 10px;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.ad-placeholder {
+  background: var(--gray-200);
+  border: 1.5px dashed var(--gray-300);
+  border-radius: var(--radius);
+  color: var(--gray-500);
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ad-leaderboard .ad-placeholder {
+  width: 728px;
+  height: 90px;
+  max-width: 100%;
+}
+.ad-rectangle .ad-placeholder {
+  width: 300px;
+  height: 250px;
+}
+
 /* ===== RESPONSIVE ===== */
 /* ===== HAMBURGER & MOBILE MENU ===== */
 .nav-hamburger {
@@ -982,6 +1021,9 @@ footer {
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 
   .modal { margin: 16px; border-radius: var(--radius-lg); }
+
+  .ad-leaderboard .ad-placeholder { width: 320px; height: 50px; }
+  .ad-rectangle .ad-placeholder { width: 300px; height: 250px; }
 }
 
 @media (max-width: 480px) {
