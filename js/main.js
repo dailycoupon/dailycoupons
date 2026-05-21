@@ -357,8 +357,38 @@ function initCouponsPage() {
   render();
 }
 
+/* ===== HAMBURGER MENU ===== */
+function initHamburger() {
+  const btn = document.getElementById('nav-hamburger');
+  const menu = document.getElementById('mobile-menu');
+  if (!btn || !menu) return;
+
+  btn.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+
+  // Close when a link is tapped
+  menu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+    });
+  });
+
+  // Close when tapping outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.navbar')) {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+    }
+  });
+}
+
 /* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded', () => {
+  initHamburger();
   initNavSearch();
 
   // Modal close handlers
