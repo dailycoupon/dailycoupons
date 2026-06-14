@@ -1,0 +1,179 @@
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #00897b;
+  --blue-dark: #00695c;
+  --blue-light: #e0f2f1;
+  --green: #00897b;
+  --green-light: #e0f2f1;
+  --orange: #e37400;
+  --red: #d93025;
+  --gray-100: #f0fafa;
+  --gray-200: #e0f2f1;
+  --gray-300: #b2dfdb;
+  --gray-500: #7a9e9b;
+  --gray-700: #3d6b68;
+  --gray-900: #1a2e2e;
+  --white: #ffffff;
+  --border: #b2dfdb;
+  --shadow: 0 1px 3px rgba(0,105,92,0.1), 0 1px 2px rgba(0,105,92,0.06);
+  --shadow-md: 0 4px 6px rgba(0,105,92,0.08), 0 2px 4px rgba(0,105,92,0.05);
+  --shadow-lg: 0 10px 25px rgba(0,105,92,0.1), 0 4px 10px rgba(0,105,92,0.05);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --transition: 0.2s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Google Sans', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gray-900);
+  background: var(--white);
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; display: block; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== SHARED BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-outline {
+  background: transparent;
+  color: var(--blue);
+  border: 1.5px solid var(--blue);
+}
+.btn-outline:hover {
+  background: var(--blue-light);
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--blue);
+  color: white;
+  border: 1.5px solid var(--blue);
+}
+.btn-primary:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+}
+
+/* ===== SHARED BADGES ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-verified { background: var(--green-light); color: var(--green); }
+.badge-exclusive { background: #fce8e6; color: var(--red); }
+.badge-discount {
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ===== SECTION LAYOUT ===== */
+.section { padding: 48px 0; }
+.section-alt { background: var(--gray-100); }
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.section-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.section-header a {
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 500;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+  background: var(--gray-100);
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+.page-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.page-header p { color: var(--gray-700); }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gray-500);
+}
+.empty-state h3 { font-size: 18px; color: var(--gray-700); margin-bottom: 8px; }
+
+/* ===== AD SLOTS ===== */
+.ad-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  background: var(--gray-100);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 50px;
+}
+
+/* ===== LEGAL PAGES ===== */
+.legal-page { padding: 48px 0; }
+.legal-page h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+.legal-page .effective-date { color: var(--gray-500); font-size: 14px; margin-bottom: 40px; }
+.legal-page h2 { font-size: 20px; font-weight: 700; margin: 36px 0 12px; color: var(--gray-900); }
+.legal-page p { color: var(--gray-700); margin-bottom: 16px; line-height: 1.8; }
+.legal-page ul { color: var(--gray-700); padding-left: 24px; margin-bottom: 16px; }
+.legal-page ul li { margin-bottom: 6px; line-height: 1.8; }
+.legal-page a { color: var(--blue); }
+
+/* ===== RESPONSIVE SECTION ===== */
+@media (max-width: 768px) {
+  .section-header h2 { font-size: 18px; }
+  .section { padding: 32px 0; }
+}
+
+@media (max-width: 480px) {
+  .section { padding: 24px 0; }
+  .container { padding: 0 14px; }
+}

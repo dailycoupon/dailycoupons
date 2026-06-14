@@ -1,0 +1,55 @@
+.couponRow {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: box-shadow var(--transition);
+}
+.couponRow:hover { box-shadow: var(--shadow); }
+
+.logoLink { flex-shrink: 0; }
+
+.storeLogoSm {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  padding: 4px;
+}
+
+.couponInfo { flex: 1; min-width: 0; }
+.couponStore { font-size: 13px; color: var(--gray-500); margin-bottom: 2px; }
+.couponDesc {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.couponTags { display: flex; gap: 6px; margin-top: 4px; }
+
+.btnShowCode {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+.btnShowCode:hover { background: var(--blue-dark); }
+
+@media (max-width: 768px) {
+  .couponRow { flex-wrap: wrap; gap: 10px; }
+  .couponInfo { min-width: calc(100% - 64px); }
+  .btnShowCode { width: 100%; margin-top: 4px; }
+}

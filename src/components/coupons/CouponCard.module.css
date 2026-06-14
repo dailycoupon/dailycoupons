@@ -1,0 +1,75 @@
+.couponCard {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+.couponCard:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.couponCardHeader {
+  background: var(--gray-100);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.storeLogo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.storeNameLink {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--blue);
+  text-decoration: none;
+}
+.storeNameLink:hover { text-decoration: underline; }
+
+.couponCardBody { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+
+.couponCardDiscount {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+
+.couponCardDesc {
+  font-size: 14px;
+  color: var(--gray-700);
+  margin-bottom: 12px;
+  flex: 1;
+}
+
+.btnShowCode {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition);
+}
+.btnShowCode:hover { background: var(--blue-dark); }
+
+.couponCardFooter {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expiry { font-size: 12px; color: var(--gray-500); }
