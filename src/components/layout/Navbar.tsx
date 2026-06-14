@@ -106,6 +106,10 @@ export default function Navbar() {
           )}
         </div>
 
+        <Link href="/submit-deal" className={styles.submitBtn}>
+          + Submit a Deal
+        </Link>
+
         <button
           className={`${styles.navHamburger} ${menuOpen ? styles.open : ''}`}
           onClick={() => setMenuOpen(o => !o)}
@@ -124,6 +128,7 @@ export default function Navbar() {
             <li><Link href="/stores" onClick={() => setMenuOpen(false)}>Stores</Link></li>
             <li><Link href="/coupons?category=cashback" onClick={() => setMenuOpen(false)}>2xCashback</Link></li>
             <li><Link href="/coupons" onClick={() => setMenuOpen(false)}>Saving Guides</Link></li>
+            <li><Link href="/submit-deal" onClick={() => setMenuOpen(false)}>+ Submit a Deal</Link></li>
           </ul>
         </div>
       )}

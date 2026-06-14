@@ -153,6 +153,27 @@
 .resultName { font-weight: 500; font-size: 14px; }
 .resultCat { font-size: 12px; color: var(--gray-500); }
 
+/* ===== SUBMIT DEAL BUTTON ===== */
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--blue);
+  color: white;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.submitBtn:hover { background: var(--blue-dark); text-decoration: none; color: white; }
+
+@media (max-width: 768px) {
+  .submitBtn { display: none; }
+}
+
 /* ===== HAMBURGER ===== */
 .navHamburger {
   display: none;
