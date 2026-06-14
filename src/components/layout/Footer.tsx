@@ -22,19 +22,15 @@ export default function Footer() {
           </div>
 
           <div className={styles.footerCol}>
-            <h4>Info</h4>
-            <ul>
-              <li><a href="mailto:hello@dailycoupons.com">Contact Us</a></li>
-            </ul>
-          </div>
-
-          <div className={styles.footerCol}>
             <h4>Legal</h4>
             <ul>
               <li><Link href="/privacy-policy">Privacy Policy</Link></li>
               <li><Link href="/terms-of-service">Terms of Service</Link></li>
               <li><Link href="/affiliate-disclosure">Affiliate Disclosure</Link></li>
             </ul>
+            <p className={styles.contactNote}>
+              Contact us at <a href="mailto:info@topdailycoupons.com">info@topdailycoupons.com</a>
+            </p>
           </div>
         </div>
 
