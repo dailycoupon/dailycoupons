@@ -9,11 +9,6 @@ export default function Footer() {
           <div className={styles.footerBrand}>
             <div className={styles.footerLogo}>🏷️ DailyCoupons</div>
             <p>Your go-to source for the best coupon codes, promo codes, and online deals — verified daily.</p>
-            <div className={styles.footerSocial}>
-              <a href="https://twitter.com/dailycoupons" title="Twitter" rel="noopener noreferrer" target="_blank">𝕏</a>
-              <a href="https://facebook.com/dailycoupons" title="Facebook" rel="noopener noreferrer" target="_blank">f</a>
-              <a href="https://instagram.com/dailycoupons" title="Instagram" rel="noopener noreferrer" target="_blank">📷</a>
-            </div>
           </div>
 
           <div className={styles.footerCol}>
