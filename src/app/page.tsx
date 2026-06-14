@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { STORES, COUPONS, TRENDING_SEARCHES, FAQ } from '@/lib/data';
 import { getTrendingCoupons, getFeaturedStores } from '@/lib/utils';
+import { AB_ZONES } from '@/lib/adbutler';
 import StoreCard from '@/components/stores/StoreCard';
 import CouponRow from '@/components/coupons/CouponRow';
 import FAQAccordion from '@/components/ui/FAQAccordion';
 import TrendingChips from '@/components/ui/TrendingChips';
+import AdSlot from '@/components/ads/AdSlot';
 import styles from './page.module.css';
 
 export default function HomePage() {
@@ -40,8 +42,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Ad slot placeholder */}
-      <div className="ad-slot" id="ad-leaderboard-1" />
+      <AdSlot zoneId={AB_ZONES.LEADERBOARD} width={728} height={90} />
 
       {/* Trending Coupons */}
       <section className="section">
@@ -58,8 +59,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ad slot placeholder */}
-      <div className="ad-slot" id="ad-rectangle-1" />
+      <AdSlot zoneId={AB_ZONES.RECTANGLE} width={300} height={250} />
 
       {/* Best Deals */}
       <section className="section section-alt">
@@ -108,8 +108,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Ad slot placeholder */}
-      <div className="ad-slot" id="ad-leaderboard-2" />
+      <AdSlot zoneId={AB_ZONES.LEADERBOARD} width={728} height={90} />
 
       {/* Trending Searches */}
       <section className="section">

@@ -1,0 +1,25 @@
+.adSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  background: var(--gray-100);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.adLabel {
+  font-size: 10px;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.leaderboard { min-height: 110px; }
+.rectangle   { min-height: 270px; }
+
+@media (max-width: 768px) {
+  .leaderboard { min-height: 70px; }
+}

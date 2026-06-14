@@ -2,8 +2,10 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { COUPONS, CATEGORIES } from '@/lib/data';
 import { getStoreById } from '@/lib/utils';
+import { AB_ZONES } from '@/lib/adbutler';
 import CouponCard from '@/components/coupons/CouponCard';
 import FilterBar from '@/components/ui/FilterBar';
+import AdSlot from '@/components/ads/AdSlot';
 import styles from './coupons.module.css';
 
 export const metadata: Metadata = {
@@ -46,8 +48,7 @@ export default async function CouponsPage({
         </div>
       </div>
 
-      {/* Ad slot placeholder */}
-      <div className="ad-slot" id="ad-leaderboard-top" />
+      <AdSlot zoneId={AB_ZONES.LEADERBOARD} width={728} height={90} />
 
       <section className="section">
         <div className="container">

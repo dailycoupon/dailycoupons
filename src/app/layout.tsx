@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { ModalProvider } from '@/context/ModalContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +24,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
           <CouponModal />
         </ModalProvider>
+        <Script
+          id="adbutler-loader"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `if(!window.AdButler){(function(){var s=document.createElement("script");s.async=true;s.type="text/javascript";s.src="https://servedbyadbutler.com/app.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(s,n);})();}`,
+          }}
+        />
       </body>
     </html>
   );

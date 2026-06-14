@@ -1,8 +1,10 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { STORES, CATEGORIES } from '@/lib/data';
+import { AB_ZONES } from '@/lib/adbutler';
 import StoreCard from '@/components/stores/StoreCard';
 import FilterBar from '@/components/ui/FilterBar';
+import AdSlot from '@/components/ads/AdSlot';
 import styles from './stores.module.css';
 
 export const metadata: Metadata = {
@@ -39,8 +41,7 @@ export default async function StoresPage({
         </div>
       </div>
 
-      {/* Ad slot placeholder */}
-      <div className="ad-slot" id="ad-leaderboard-top" />
+      <AdSlot zoneId={AB_ZONES.LEADERBOARD} width={728} height={90} />
 
       <section className="section">
         <div className="container">
