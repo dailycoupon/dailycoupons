@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer';
 import CouponModal from '@/components/coupons/CouponModal';
 import './globals.css';
 
+const ADSENSE_ID = 'ca-pub-2131672681898268';
+
 export const metadata: Metadata = {
   title: 'DailyCoupons – Best Promo Codes & Coupon Codes for 2026',
   description: 'Find the best verified coupon codes, promo codes, and deals from 60+ top stores. Save money every time you shop online.',
@@ -17,6 +19,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body>
         <ModalProvider>
           <Navbar />
