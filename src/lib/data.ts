@@ -1,6 +1,8 @@
 import type { Store, Coupon, Category, FAQItem } from '@/types';
 
 export const STORES: Store[] = [
+  { id: 'temu', name: 'Temu', logo: 'https://www.google.com/s2/favicons?domain=temu.com&sz=128', category: 'Shopping', url: 'https://temu.com', cashback: '0%', featured: true },
+  { id: 'aliexpress', name: 'AliExpress', logo: 'https://www.google.com/s2/favicons?domain=aliexpress.com&sz=128', category: 'Shopping', url: 'https://s.click.aliexpress.com/e/_c2v2CSmV', cashback: '0%', featured: true },
   { id: 'amazon', name: 'Amazon', logo: 'https://www.google.com/s2/favicons?domain=amazon.com&sz=128', category: 'Shopping', url: 'https://amazon.com', cashback: '3%', featured: true },
   { id: 'target', name: 'Target', logo: 'https://www.google.com/s2/favicons?domain=target.com&sz=128', category: 'Shopping', url: 'https://target.com', cashback: '2%', featured: true },
   { id: 'walmart', name: 'Walmart', logo: 'https://www.google.com/s2/favicons?domain=walmart.com&sz=128', category: 'Shopping', url: 'https://walmart.com', cashback: '2%', featured: true },
@@ -65,6 +67,8 @@ export const STORES: Store[] = [
 ];
 
 export const COUPONS: Coupon[] = [
+  { id: 101, storeId: 'temu', code: 'ald639490', description: 'Download the Temu app and apply code ald639490 at checkout to get 30% off your order!', discount: '30% Off', category: 'Shopping', expiry: '2026-12-31', verified: true, exclusive: true, trending: true },
+  { id: 102, storeId: 'aliexpress', code: '', description: 'Huge deals and savings across all product categories — electronics, fashion, home, beauty, and more. Shop millions of items at unbeatable prices.', discount: 'Huge Deals', category: 'Shopping', expiry: '2026-12-31', verified: true, exclusive: false, trending: true },
   { id: 1, storeId: 'amazon', code: 'SAVE10', description: 'Save 10% on your next order', discount: '10% Off', category: 'Shopping', expiry: '2026-06-30', verified: true, exclusive: true, trending: true },
   { id: 2, storeId: 'amazon', code: 'PRIME20', description: 'Extra 20% off for Prime members', discount: '20% Off', category: 'Shopping', expiry: '2026-05-31', verified: true, exclusive: false, trending: false },
   { id: 3, storeId: 'amazon', code: '', description: 'Free shipping on orders over $35', discount: 'Free Shipping', category: 'Shopping', expiry: '2026-12-31', verified: true, exclusive: false, trending: false },
