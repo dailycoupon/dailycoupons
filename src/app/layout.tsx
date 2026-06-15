@@ -36,6 +36,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CouponModal />
         </ModalProvider>
         <Script
+          id="monetag-tag"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11150434',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`,
+          }}
+        />
+        <Script
           id="adbutler-loader"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
