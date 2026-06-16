@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { AB_ACCOUNT } from '@/lib/adbutler';
 import styles from './AdSlot.module.css';
-import AntiFraudFrame from './AntiFraudFrame';
 
 interface AdSlotProps {
   zoneId: number;
@@ -57,16 +56,9 @@ export default function AdSlot({ zoneId, width, height }: AdSlotProps) {
   const isLeaderboard = width === 728;
 
   return (
-    <>
-      {/* In per-ad mode, trigger the anti-fraud check alongside each ad slot.
-          AntiFraudFrame's module-level singleton ensures only the first slot fires. */}
-      {process.env.NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE === 'per-ad' && (
-        <AntiFraudFrame />
-      )}
-      <div className={`${styles.adSlot} ${isLeaderboard ? styles.leaderboard : styles.rectangle}`}>
-        <span className={styles.adLabel}>Advertisement</span>
-        <div ref={divRef} />
-      </div>
-    </>
+    <div className={`${styles.adSlot} ${isLeaderboard ? styles.leaderboard : styles.rectangle}`}>
+      <span className={styles.adLabel}>Advertisement</span>
+      <div ref={divRef} />
+    </div>
   );
 }
