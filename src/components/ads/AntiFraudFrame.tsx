@@ -20,16 +20,22 @@ const MAX_USER_ID_LEN = 256;
  * route the proxy matcher skips). The encrypted impid is minted here on the
  * Node.js runtime so the AES key never leaves server rendering.
  *
- * Reading headers()/cookies() opts the route into dynamic rendering, which is
- * required: the impid embeds a per-request timestamp + IV and is per-visitor,
- * so the surrounding HTML must never be statically cached.
+ * IMPORTANT: headers() is read FIRST, before getConfig(). Reading request data
+ * is what opts this segment into dynamic (per-request) rendering — no
+ * `force-dynamic` needed. If config threw before headers() were reached (e.g.
+ * the secret is absent in the build context), the page would be statically
+ * prerendered with the iframe baked out — invisible at runtime even when config
+ * is valid. Touching headers() up front makes the route reliably dynamic.
  */
 export default async function AntiFraudFrame() {
+  // Read request data up front so this segment is always dynamic, regardless of
+  // whether config below succeeds.
+  const h = await headers();
+
   let cfg: ReturnType<typeof getConfig>;
   try {
     cfg = getConfig();
-  } catch (err) {
-    console.error('[antifraud]', err);
+  } catch {
     return null;
   }
 
@@ -37,7 +43,6 @@ export default async function AntiFraudFrame() {
 
   // ── Subnet gate ───────────────────────────────────────────────────────────
   // normalizeIp strips ::ffff: prefix so IPv4-mapped v6 addresses match v4 CIDRs
-  const h = await headers();
   const ip = normalizeIp(getClientIp(h));
   if (!ip || !isIpInSubnets(ip, cfg.subnets)) return null;
 
@@ -58,8 +63,7 @@ export default async function AntiFraudFrame() {
   let impid: string;
   try {
     impid = buildImpid({ key: cfg.keyBytes, ip, ua, userId });
-  } catch (err) {
-    console.error('[antifraud] impid generation failed:', err);
+  } catch {
     return null;
   }
 
