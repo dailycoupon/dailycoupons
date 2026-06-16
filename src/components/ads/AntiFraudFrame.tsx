@@ -35,15 +35,32 @@ export default async function AntiFraudFrame() {
   let cfg: ReturnType<typeof getConfig>;
   try {
     cfg = getConfig();
-  } catch {
+  } catch (err) {
+    console.warn('[antifraud] getConfig threw:', (err as Error).message);
     return null;
   }
 
-  if (!cfg.enabled) return null;
+  if (!cfg.enabled) {
+    console.warn('[antifraud] disabled (ANTIFRAUD_ENABLED=false)');
+    return null;
+  }
 
   // ── Subnet gate ───────────────────────────────────────────────────────────
   // normalizeIp strips ::ffff: prefix so IPv4-mapped v6 addresses match v4 CIDRs
   const ip = normalizeIp(getClientIp(h));
+  console.warn(
+    '[antifraud] ip-diagnostics ' +
+      JSON.stringify({
+        resolvedIp: ip,
+        'x-nf-client-connection-ip': h.get('x-nf-client-connection-ip'),
+        'x-forwarded-for': h.get('x-forwarded-for'),
+        'x-real-ip': h.get('x-real-ip'),
+        subnetsConfigured: cfg.subnets.length,
+        inSubnet: ip ? isIpInSubnets(ip, cfg.subnets) : false,
+        uaPresent: Boolean(h.get('user-agent')),
+        uidHeaderPresent: Boolean(h.get(UID_HEADER)),
+      })
+  );
   if (!ip || !isIpInSubnets(ip, cfg.subnets)) return null;
 
   // Go auth rejects an empty UA; bail rather than mint an invalid impid.
