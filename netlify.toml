@@ -7,8 +7,14 @@
   # non-secret config (short tokens / public URLs like "impid", "true") whose
   # values legitimately appear in the committed .env.example, so they are
   # excluded to avoid false positives.
+  #
+  # NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE is no longer used by the app, but it
+  # may still exist in the Netlify dashboard env. It's a NEXT_PUBLIC_ flag
+  # (public by design) whose value (e.g. "global") appears throughout the
+  # bundle, so it is exempted here too. Safe to drop once it's deleted from the
+  # Netlify dashboard env vars.
   [build.environment]
-    SECRETS_SCAN_OMIT_KEYS = "ANTIFRAUD_IFRAME_BASE_URL,ANTIFRAUD_IP_SUBNETS,ANTIFRAUD_QUERY_PARAM,ANTIFRAUD_ENABLED"
+    SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE,ANTIFRAUD_IFRAME_BASE_URL,ANTIFRAUD_IP_SUBNETS,ANTIFRAUD_QUERY_PARAM,ANTIFRAUD_ENABLED"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
