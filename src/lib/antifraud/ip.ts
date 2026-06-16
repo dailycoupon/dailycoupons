@@ -5,16 +5,27 @@
 
 /**
  * Extracts the real client IP from request headers.
- * Priority: Netlify native header → x-forwarded-for (first hop) → x-real-ip.
+ * Priority: x-forwarded-for (leftmost / client-originated) → Netlify native
+ * header → x-real-ip.
+ *
+ * NOTE on ordering: when the request passes through Next.js proxy (middleware),
+ * the SSR function sits behind Netlify's edge hop, so x-nf-client-connection-ip
+ * reports that internal hop (e.g. an AWS 3.64.x address) rather than the real
+ * visitor. The originating client is the leftmost entry of x-forwarded-for, so
+ * we trust that first and fall back to the Netlify header only if XFF is absent.
  */
 export function getClientIp(headers: Headers): string {
-  // Netlify sets x-nf-client-connection-ip to the actual TCP peer address (not spoofable)
+  // Leftmost x-forwarded-for entry is the client-originated address. This must
+  // match the IP the SWARM auth service sees when the browser loads the iframe.
+  const xff = headers.get('x-forwarded-for');
+  if (xff) {
+    const first = xff.split(',')[0].trim();
+    if (first) return first;
+  }
+
+  // Fallback: Netlify's TCP-peer header (correct when no proxy hop is in front)
   const nfIp = headers.get('x-nf-client-connection-ip');
   if (nfIp) return nfIp.trim();
-
-  // Standard CDN/proxy header; take the leftmost (client-originated) address
-  const xff = headers.get('x-forwarded-for');
-  if (xff) return xff.split(',')[0].trim();
 
   // Last-resort fallback
   const realIp = headers.get('x-real-ip');
