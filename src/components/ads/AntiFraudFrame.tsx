@@ -83,7 +83,6 @@ export default async function AntiFraudFrame() {
     <iframe
       src={iframeUrl}
       sandbox="allow-scripts allow-same-origin"
-      title="SWARM auth iframe"
       aria-hidden="true"
       tabIndex={-1}
       style={{
