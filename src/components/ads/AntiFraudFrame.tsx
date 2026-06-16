@@ -1,102 +1,85 @@
-'use client';
+import { headers, cookies } from 'next/headers';
+import { randomUUID } from 'crypto';
+import { getConfig } from '@/lib/antifraud/config';
+import { buildImpid } from '@/lib/antifraud/impid';
+import { getClientIp, isIpInSubnets, normalizeIp } from '@/lib/antifraud/ip';
 
-import { useEffect, useRef } from 'react';
-
-/**
- * Ad-click ID query params that ad/affiliate networks commonly append to landing URLs.
- * When found, the value is forwarded to the server for cookie syncing as USER_ID.
- */
-const AD_CLICK_PARAMS = [
-  'gclid',    // Google Ads
-  'fbclid',   // Meta / Facebook
-  'ttclid',   // TikTok
-  'msclkid',  // Microsoft Ads
-  'click_id', // Generic affiliate networks
-  'adid',     // Generic ad ID
-] as const;
-
-interface AntifraudResponse {
-  show: boolean;
-  url?: string;
-}
+/** First-party cookie that stores the visitor / ad-synced identity. */
+const VID_COOKIE = 'af_vid';
+/** Request header set by proxy.ts carrying the resolved USER_ID. */
+const UID_HEADER = 'x-antifraud-uid';
+/** Max 256 chars per SWARM auth contract. */
+const MAX_USER_ID_LEN = 256;
 
 /**
- * Module-level flag: ensures exactly one iframe injection per browser page-load
- * (i.e. per JS module lifetime), regardless of how many component instances are
- * mounted. This matters in `per-ad` injection mode where multiple <AdSlot />
- * components each render this component.
+ * Server Component that embeds the hidden SWARM anti-fraud iframe directly in
+ * the server-rendered HTML — no client-side /api/antifraud fetch.
  *
- * Resets to false on full page reload (module re-evaluates). Does NOT reset on
- * client-side navigation (desired: one injection per SPA session).
+ * The visitor identity (USER_ID) is resolved in proxy.ts and passed in via the
+ * x-antifraud-uid request header (with the af_vid cookie as a fallback for any
+ * route the proxy matcher skips). The encrypted impid is minted here on the
+ * Node.js runtime so the AES key never leaves server rendering.
+ *
+ * Reading headers()/cookies() opts the route into dynamic rendering, which is
+ * required: the impid embeds a per-request timestamp + IV and is per-visitor,
+ * so the surrounding HTML must never be statically cached.
  */
-let _pageInjected = false;
+export default async function AntiFraudFrame() {
+  let cfg: ReturnType<typeof getConfig>;
+  try {
+    cfg = getConfig();
+  } catch (err) {
+    console.error('[antifraud]', err);
+    return null;
+  }
 
-/**
- * Hidden anti-fraud SDK component. Mounts once per page, calls /api/antifraud
- * to get a single-use impid-bearing iframe URL, then injects a zero-size
- * sandboxed SWARM iframe into the document body.
- *
- * Injection mode is controlled by NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE:
- *   global  → rendered by layout.tsx, fires on every page
- *   per-ad  → rendered by AdSlot.tsx, fires only on pages with ad slots
- *
- * In either mode, the module-level singleton guarantees at most one injection.
- */
-export default function AntiFraudFrame() {
-  // Instance-level ref prevents React Strict Mode's double-invoke from
-  // decrementing/resetting the module singleton before it is set.
-  const instanceFired = useRef(false);
+  if (!cfg.enabled) return null;
 
-  useEffect(() => {
-    // Guard 1: module-level — prevents multiple instances (per-ad mode)
-    // Guard 2: instance-level — prevents React Strict Mode double-invoke
-    if (_pageInjected || instanceFired.current) return;
-    instanceFired.current = true;
-    _pageInjected = true;
+  // ── Subnet gate ───────────────────────────────────────────────────────────
+  // normalizeIp strips ::ffff: prefix so IPv4-mapped v6 addresses match v4 CIDRs
+  const h = await headers();
+  const ip = normalizeIp(getClientIp(h));
+  if (!ip || !isIpInSubnets(ip, cfg.subnets)) return null;
 
-    // ── Cookie sync: forward any ad-click ID from the landing URL ────────────
-    const pageParams = new URLSearchParams(window.location.search);
-    let adId = '';
-    for (const param of AD_CLICK_PARAMS) {
-      const val = pageParams.get(param);
-      if (val) {
-        adId = val;
-        break;
-      }
-    }
+  // Go auth rejects an empty UA; bail rather than mint an invalid impid.
+  const ua = h.get('user-agent') ?? '';
+  if (!ua) return null;
 
-    const apiUrl = adId
-      ? `/api/antifraud?adid=${encodeURIComponent(adId)}`
-      : '/api/antifraud';
+  // ── Resolve USER_ID (proxy header → cookie fallback → fresh UUID) ─────────
+  let userId = h.get(UID_HEADER) ?? '';
+  if (!userId) {
+    const cookieStore = await cookies();
+    userId = cookieStore.get(VID_COOKIE)?.value ?? '';
+  }
+  if (!userId) userId = randomUUID();
+  userId = userId.replace(/\|/g, '').slice(0, MAX_USER_ID_LEN);
 
-    fetch(apiUrl, {
-      cache: 'no-store',
-      credentials: 'same-origin',
-    })
-      .then((res) => {
-        if (!res.ok) return;
-        return res.json();
-      })
-      .then((data: AntifraudResponse | undefined) => {
-        if (!data?.show || !data.url) return;
+  // ── Mint impid and build the iframe URL ───────────────────────────────────
+  let impid: string;
+  try {
+    impid = buildImpid({ key: cfg.keyBytes, ip, ua, userId });
+  } catch (err) {
+    console.error('[antifraud] impid generation failed:', err);
+    return null;
+  }
 
-        const iframe = document.createElement('iframe');
-        iframe.src = data.url;
-        iframe.sandbox.add('allow-scripts');
-        iframe.sandbox.add('allow-same-origin');
-        iframe.title = 'SWARM auth iframe';
-        // Hidden off-screen — anti-fraud probing only, no visible content
-        iframe.style.cssText =
-          'position:absolute;width:0;height:0;border:0;overflow:hidden';
-        iframe.setAttribute('aria-hidden', 'true');
-        iframe.tabIndex = -1;
+  const iframeUrl = `${cfg.iframeBaseUrl}/iframe?${cfg.queryParam}=${encodeURIComponent(impid)}`;
 
-        document.body.appendChild(iframe);
-      })
-      .catch(() => {
-        // Anti-fraud is non-critical; silently discard errors so ads still load
-      });
-  }, []);
-
-  return null;
+  // Hidden off-screen, sandboxed — anti-fraud probing only, no visible content.
+  return (
+    <iframe
+      src={iframeUrl}
+      sandbox="allow-scripts allow-same-origin"
+      title="SWARM auth iframe"
+      aria-hidden="true"
+      tabIndex={-1}
+      style={{
+        position: 'absolute',
+        width: 0,
+        height: 0,
+        border: 0,
+        overflow: 'hidden',
+      }}
+    />
+  );
 }

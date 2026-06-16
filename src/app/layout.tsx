@@ -50,11 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `if(!window.AdButler){(function(){var s=document.createElement("script");s.async=true;s.type="text/javascript";s.src="https://servedbyadbutler.com/app.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(s,n);})();}`,
           }}
         />
-        {/* Inject anti-fraud iframe globally unless per-ad mode is chosen.
-            In per-ad mode AdSlot renders AntiFraudFrame alongside each placement. */}
-        {process.env.NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE !== 'per-ad' && (
-          <AntiFraudFrame />
-        )}
+        {/* Anti-fraud SWARM iframe, embedded directly in the server-rendered
+            HTML (identity resolved in proxy.ts). No client-side fetch. */}
+        <AntiFraudFrame />
       </body>
     </html>
   );
