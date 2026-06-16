@@ -2,5 +2,14 @@
   command = "npm run build"
   publish = ".next"
 
+  # Secrets scanning: only ANTIFRAUD_SECRET_KEY is a real secret and it is
+  # server-only (never inlined into the client bundle). The keys below are
+  # non-secret config whose values legitimately appear in build output and/or
+  # the committed .env.example, so they are excluded to avoid false positives.
+  #   - NEXT_PUBLIC_* is inlined into the client bundle by design
+  #   - the others are short config tokens / public URLs (e.g. "impid", "true")
+  [build.environment]
+    SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_ANTIFRAUD_INJECTION_MODE,ANTIFRAUD_IFRAME_BASE_URL,ANTIFRAUD_IP_SUBNETS,ANTIFRAUD_QUERY_PARAM,ANTIFRAUD_ENABLED"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
